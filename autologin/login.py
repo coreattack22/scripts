@@ -2,12 +2,15 @@ from time import sleep
 import os
 import subprocess
 import sys
+import json
+
 
 def activate_app(app_name):
 	subprocess.Popen(app_name, shell=True)
 	print ("wait for app...")
 	sleep(50)
 
+#適宜うまくログインできるように書き換え
 def click():
 	for i in range(10):
 		sleep(5)
@@ -17,13 +20,16 @@ def click():
 		print("clicked!")
 
 
+path = os.path.dirname(os.path.abspath(__name__)) 
+print (path)
 
+#Noxの入っているディレクトリを指定
 os.chdir("C:\\Program Files (x86)\\Nox\\bin")
-app_name=['nox.exe -package:jp.co.bandainamcoent.BNEI0242',
-		  'nox.exe -package:jp.co.cygames.Shadowverse',
-		  'nox/exe -package:com.bandainamcoent.imas_millionlive_theaterdays']
 
-for i in app_name:
-	activate_app(i)
+f = open(path+'\\applist.json', 'r')
+json = json.load(f)
+
+for i in json['AppList']:
+	print('nox.exe -package:'+i)
+	activate_app('nox.exe -package:'+i)
 	click()
-
